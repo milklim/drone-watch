@@ -35,6 +35,11 @@ body,
     height: 100%;
 }
 
+/* Keep tile-load gaps dark instead of Leaflet's default light gray. */
+.leaflet-container {
+    background: var(--color-bg);
+}
+
 body {
     margin: 0;
     background: var(--color-bg);
