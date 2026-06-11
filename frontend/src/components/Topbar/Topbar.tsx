@@ -1,13 +1,12 @@
 /**
  * DroneWatch — top command bar.
  *
- * Assembles the brand mark, live fleet pills, analytics tabs, the WebSocket
- * indicator, and the new-mission action into the C2 header strip.
+ * Assembles the brand mark, live fleet pills, the WebSocket indicator, and the
+ * new-mission action into the C2 header strip.
  */
 
 import type { ConnectionStatus } from "../../hooks/useWebSocket.ts";
 import { StatusPills } from "./StatusPills.tsx";
-import { LayerTabs } from "./LayerTabs.tsx";
 
 const WS_LABEL: Record<ConnectionStatus, string> = {
     open: "WS LIVE",
@@ -66,7 +65,6 @@ export function Topbar({
             </div>
 
             <StatusPills />
-            <LayerTabs />
 
             <div
                 className={`hidden items-center gap-2 border-r border-border-base px-4.5 text-[10px] font-medium tracking-widest lg:flex ${WS_COLOR[status]}`}

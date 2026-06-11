@@ -7,7 +7,7 @@
 
 import type { LatLng } from "../../../../shared/types.ts";
 
-/** Mapbox / deck.gl order. */
+/** Mapbox / GeoJSON order. */
 export function toLngLatArray({ lat, lng }: LatLng): [number, number] {
     return [lng, lat];
 }
