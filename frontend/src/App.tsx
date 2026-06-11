@@ -5,6 +5,7 @@ import { Topbar } from "./components/Topbar/Topbar.tsx";
 import { Sidebar } from "./components/Sidebar/Sidebar.tsx";
 import { StatusBar } from "./components/Bottombar/StatusBar.tsx";
 import { MissionModal } from "./components/Mission/MissionModal.tsx";
+import { MapOverlays } from "./components/MapOverlays.tsx";
 import { useWebSocket } from "./hooks/useWebSocket.ts";
 import { useMetricsTracker } from "./hooks/useMetricsTracker.ts";
 
@@ -25,6 +26,7 @@ function App() {
                 <Sidebar />
                 <main className="relative min-w-0 flex-1">
                     <MapView />
+                    <MapOverlays status={status} />
                     <div className="absolute right-3 top-3 z-1100">
                         <SettingsPanel />
                     </div>

@@ -25,10 +25,20 @@ const WS_LABEL: Record<ConnectionStatus, string> = {
     closed: "WS DISCONNECTED",
 };
 
-function Segment({ label, value }: { label: string; value: string }) {
+function Segment({
+    label,
+    value,
+    className = "",
+}: {
+    label: string;
+    value: string;
+    className?: string;
+}) {
     return (
-        <div className="flex h-full items-center gap-1.5 border-r border-border-base px-3.5 first:pl-0">
-            <span className="text-[9px] uppercase tracking-[0.1em] text-muted">
+        <div
+            className={`h-full items-center gap-1.5 border-r border-border-base px-3.5 first:pl-0 ${className}`}
+        >
+            <span className="text-[9px] uppercase tracking-widest text-muted">
                 {label}
             </span>
             <span className="font-semibold text-text">{value}</span>
@@ -52,11 +62,27 @@ export function StatusBar({ status }: { status: ConnectionStatus }) {
     const activeMissions = drones.filter((d) => d.status === "active").length;
 
     return (
-        <footer className="flex h-[var(--spacing-botbar)] shrink-0 items-center border-t border-border-base bg-surface px-3.5 text-[10px] text-dim">
-            <Segment label="Elapsed" value={formatElapsed(elapsed)} />
-            <Segment label="Total Dist" value={`${totalKm.toFixed(1)} km`} />
-            <Segment label="Missions" value={`${activeMissions} ACTIVE`} />
-            <Segment label="Engine" value={mapEngine.toUpperCase()} />
+        <footer className="flex h-[var(--spacing-botbar)] shrink-0 items-center overflow-hidden border-t border-border-base bg-surface px-3.5 text-[10px] text-dim">
+            <Segment
+                label="Elapsed"
+                value={formatElapsed(elapsed)}
+                className="flex"
+            />
+            <Segment
+                label="Total Dist"
+                value={`${totalKm.toFixed(1)} km`}
+                className="flex"
+            />
+            <Segment
+                label="Missions"
+                value={`${activeMissions} ACTIVE`}
+                className="flex"
+            />
+            <Segment
+                label="Engine"
+                value={mapEngine.toUpperCase()}
+                className="hidden md:flex"
+            />
 
             <div
                 className={`ml-auto flex items-center gap-2 border-r border-border-base px-3.5 ${WS_COLOR[status]}`}
@@ -70,13 +96,13 @@ export function StatusBar({ status }: { status: ConnectionStatus }) {
                               : "bg-idle animate-pulse"
                     }`}
                 />
-                <span className="text-[9px] tracking-[0.1em]">
+                <span className="text-[9px] tracking-widest">
                     {WS_LABEL[status]}
                 </span>
             </div>
 
-            <div className="flex items-center gap-2 pl-3.5">
-                <span className="text-[9px] uppercase tracking-[0.1em] text-muted">
+            <div className="hidden items-center gap-2 pl-3.5 lg:flex">
+                <span className="text-[9px] uppercase tracking-widest text-muted">
                     Cursor
                 </span>
                 <span className="font-semibold text-text">

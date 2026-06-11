@@ -10,7 +10,7 @@ import { TelemetryPanel } from "./TelemetryPanel.tsx";
 
 export function Sidebar() {
     return (
-        <aside className="flex w-sidebar shrink-0 flex-col overflow-hidden border-r border-border-base bg-surface">
+        <aside className="flex w-56 shrink-0 flex-col overflow-hidden border-r border-border-base bg-surface lg:w-sidebar">
             <DroneList />
             <TelemetryPanel />
         </aside>

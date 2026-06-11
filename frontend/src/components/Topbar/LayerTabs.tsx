@@ -19,7 +19,7 @@ export function LayerTabs() {
     const setActiveLayer = useSettingsStore((s) => s.setActiveLayer);
 
     return (
-        <div className="flex h-full items-center gap-0.5 border-r border-border-base px-4">
+        <div className="hidden h-full items-center gap-0.5 border-r border-border-base px-4 md:flex">
             {TABS.map(({ layer, label }) => {
                 const active = layer === activeLayer;
                 return (

@@ -39,7 +39,7 @@ export function StatusPills() {
     );
 
     return (
-        <div className="flex h-full items-center gap-4.5 border-r border-border-base px-5">
+        <div className="flex h-full shrink-0 items-center gap-4.5 border-r border-border-base px-5">
             {PILLS.map(({ status, label, text, dot }) => (
                 <span
                     key={status}

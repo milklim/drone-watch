@@ -35,8 +35,8 @@ export function Topbar({
     onNewMission: () => void;
 }) {
     return (
-        <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center border-b border-border-base bg-surface px-4">
-            <div className="flex select-none items-center gap-2.5 border-r border-border-base pr-5 text-[13px] font-bold tracking-[0.18em] text-white">
+        <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center overflow-hidden border-b border-border-base bg-surface px-4">
+            <div className="flex shrink-0 select-none items-center gap-2.5 border-r border-border-base pr-5 text-[13px] font-bold tracking-[0.18em] text-white">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                     <polygon
                         points="12,2 4,9 7,9 7,15 9,15 9,11 15,11 15,15 17,15 17,9 20,9"
@@ -62,14 +62,14 @@ export function Topbar({
                     />
                     <circle cx="12" cy="6" r="1.5" fill="#93c5fd" />
                 </svg>
-                DRONEWATCH
+                <span className="hidden lg:inline">DRONEWATCH</span>
             </div>
 
             <StatusPills />
             <LayerTabs />
 
             <div
-                className={`flex items-center gap-2 border-r border-border-base px-4.5 text-[10px] font-medium tracking-widest ${WS_COLOR[status]}`}
+                className={`hidden items-center gap-2 border-r border-border-base px-4.5 text-[10px] font-medium tracking-widest lg:flex ${WS_COLOR[status]}`}
             >
                 <span
                     className={`h-1.5 w-1.5 rounded-full ${WS_DOT[status]}`}
@@ -80,7 +80,7 @@ export function Topbar({
             <button
                 type="button"
                 onClick={onNewMission}
-                className="ml-auto h-7.5 rounded-[3px] bg-accent px-4 text-[10px] font-bold tracking-[0.12em] text-white transition-colors hover:bg-[#2563eb] active:scale-[0.97]"
+                className="ml-auto shrink-0 whitespace-nowrap h-7.5 rounded-[3px] bg-accent px-4 text-[10px] font-bold tracking-[0.12em] text-white transition-colors hover:bg-[#2563eb] active:scale-[0.97]"
             >
                 + NEW MISSION
             </button>
