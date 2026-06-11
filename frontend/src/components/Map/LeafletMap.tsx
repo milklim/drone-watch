@@ -5,7 +5,7 @@
  * props and reports clicks back up. No drone/mission logic lives here.
  */
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import L from "leaflet";
 import {
     CircleMarker,
@@ -13,6 +13,7 @@ import {
     Marker,
     Polyline,
     TileLayer,
+    useMap,
     useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -56,14 +57,52 @@ function droneIcon(drone: Drone, selected: boolean): L.DivIcon {
     });
 }
 
-function MapClickHandler({
+function MapEvents({
     onMapClick,
+    onCursorMove,
 }: {
     onMapClick: MapEngineProps["onMapClick"];
+    onCursorMove: MapEngineProps["onCursorMove"];
 }) {
     useMapEvents({
         click: (e) => onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng }),
+        mousemove: (e) =>
+            onCursorMove({ lat: e.latlng.lat, lng: e.latlng.lng }),
+        mouseout: () => onCursorMove(null),
     });
+    return null;
+}
+
+/**
+ * Ease the camera to the selected drone when the selection changes (not on
+ * every position tick). Latest drones are read through a ref so the effect
+ * only fires on selection change.
+ */
+function RecenterOnSelect({
+    selectedDroneId,
+    drones,
+}: {
+    selectedDroneId: string | null;
+    drones: Drone[];
+}) {
+    const map = useMap();
+    const dronesRef = useRef(drones);
+    useEffect(() => {
+        dronesRef.current = drones;
+    }, [drones]);
+
+    useEffect(() => {
+        if (!selectedDroneId) return;
+        const drone = dronesRef.current.find((d) => d.id === selectedDroneId);
+        if (drone) {
+            map.flyTo(
+                [drone.position.lat, drone.position.lng],
+                Math.max(map.getZoom(), 14),
+                { duration: 0.6 },
+            );
+        }
+    }, [selectedDroneId, map]);
+
     return null;
 }
 
@@ -74,6 +113,7 @@ export function LeafletMap({
     draftWaypoints,
     onMapClick,
     onDroneClick,
+    onCursorMove,
 }: MapEngineProps) {
     const trails = useDroneTrails(drones);
     const droneById = new Map(drones.map((d) => [d.id, d]));
@@ -86,7 +126,11 @@ export function LeafletMap({
             zoomControl={false}
         >
             <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
-            <MapClickHandler onMapClick={onMapClick} />
+            <MapEvents onMapClick={onMapClick} onCursorMove={onCursorMove} />
+            <RecenterOnSelect
+                selectedDroneId={selectedDroneId}
+                drones={drones}
+            />
 
             {routes.map((route) => {
                 const selected = route.droneId === selectedDroneId;

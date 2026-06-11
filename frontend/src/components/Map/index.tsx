@@ -10,6 +10,7 @@
 import { useDroneStore } from "../../store/droneStore.ts";
 import { useRouteStore } from "../../store/routeStore.ts";
 import { useSettingsStore } from "../../store/settingsStore.ts";
+import { useUiStore } from "../../store/uiStore.ts";
 import type { MapEngineProps } from "./types.ts";
 import { LeafletMap } from "./LeafletMap.tsx";
 import { MapboxMap } from "./MapboxMap.tsx";
@@ -22,6 +23,7 @@ export function MapView() {
     const draftWaypoints = useRouteStore((s) => s.draftWaypoints);
     const addDraftWaypoint = useRouteStore((s) => s.addDraftWaypoint);
     const mapEngine = useSettingsStore((s) => s.mapEngine);
+    const setCursor = useUiStore((s) => s.setCursor);
 
     const engineProps: MapEngineProps = {
         drones,
@@ -30,6 +32,7 @@ export function MapView() {
         draftWaypoints,
         onMapClick: addDraftWaypoint,
         onDroneClick: selectDrone,
+        onCursorMove: setCursor,
     };
 
     return mapEngine === "leaflet" ? (

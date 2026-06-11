@@ -15,4 +15,6 @@ export interface MapEngineProps {
     draftWaypoints: LatLng[];
     onMapClick: (latlng: LatLng) => void;
     onDroneClick: (id: string) => void;
+    /** Live pointer position over the map, or null when it leaves. */
+    onCursorMove: (latlng: LatLng | null) => void;
 }

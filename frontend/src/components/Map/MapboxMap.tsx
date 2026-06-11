@@ -211,10 +211,15 @@ export function MapboxMap({
     draftWaypoints,
     onMapClick,
     onDroneClick,
+    onCursorMove,
 }: MapEngineProps) {
     const mapRef = useRef<MapRef>(null);
     const trails = useDroneTrails(drones);
     const followSelected = useSettingsStore((s) => s.followSelected);
+    const dronesRef = useRef(drones);
+    useEffect(() => {
+        dronesRef.current = drones;
+    }, [drones]);
 
     const routeLines = useMemo(
         () =>
@@ -292,6 +297,20 @@ export function MapboxMap({
         selectedDrone,
     ]);
 
+    // Recenter once when the selection changes (independent of follow mode).
+    useEffect(() => {
+        if (!selectedDroneId) return;
+        const drone = dronesRef.current.find((d) => d.id === selectedDroneId);
+        const map = mapRef.current;
+        if (drone && map) {
+            map.easeTo({
+                center: [drone.position.lng, drone.position.lat],
+                zoom: Math.max(map.getZoom(), 13),
+                duration: 600,
+            });
+        }
+    }, [selectedDroneId]);
+
     if (!MAPBOX_TOKEN) {
         return (
             <div className="flex h-full w-full items-center justify-center bg-bg px-6 text-center text-dim">
@@ -315,6 +334,10 @@ export function MapboxMap({
             onClick={(e) =>
                 onMapClick({ lat: e.lngLat.lat, lng: e.lngLat.lng })
             }
+            onMouseMove={(e) =>
+                onCursorMove({ lat: e.lngLat.lat, lng: e.lngLat.lng })
+            }
+            onMouseOut={() => onCursorMove(null)}
         >
             <Layer {...buildingsLayer} />
 

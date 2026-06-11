@@ -1,21 +1,17 @@
 import { useEffect } from "react";
 import { MapView } from "./components/Map/index.tsx";
 import { SettingsPanel } from "./components/Settings/SettingsPanel.tsx";
+import { Topbar } from "./components/Topbar/Topbar.tsx";
+import { Sidebar } from "./components/Sidebar/Sidebar.tsx";
+import { StatusBar } from "./components/Bottombar/StatusBar.tsx";
 import { useWebSocket } from "./hooks/useWebSocket.ts";
-import { useDroneStore } from "./store/droneStore.ts";
+import { useMetricsTracker } from "./hooks/useMetricsTracker.ts";
 import { useRouteStore } from "./store/routeStore.ts";
-import type { ConnectionStatus } from "./hooks/useWebSocket.ts";
 import type { RoutesResponse } from "../../shared/types.ts";
-
-const STATUS_COLOR: Record<ConnectionStatus, string> = {
-    open: "text-active",
-    connecting: "text-idle",
-    closed: "text-danger",
-};
 
 function App() {
     const { status } = useWebSocket();
-    const droneCount = useDroneStore((s) => s.drones.length);
+    useMetricsTracker();
     const setRoutes = useRouteStore((s) => s.setRoutes);
 
     // Routes don't change on their own, so a one-time REST snapshot is enough;
@@ -36,15 +32,18 @@ function App() {
     }, [setRoutes]);
 
     return (
-        <div className="relative h-full bg-bg text-text">
-            <MapView />
-            <div className="absolute left-3 top-3 z-1100">
-                <SettingsPanel />
+        <div className="flex h-full flex-col bg-bg text-text">
+            <Topbar status={status} />
+            <div className="flex min-h-0 flex-1">
+                <Sidebar />
+                <main className="relative min-w-0 flex-1">
+                    <MapView />
+                    <div className="absolute right-3 top-3 z-1100">
+                        <SettingsPanel />
+                    </div>
+                </main>
             </div>
-            <div className="absolute right-3 top-3 z-1100 rounded border border-border-base bg-surface/90 px-3 py-1.5 text-dim">
-                ws: <span className={STATUS_COLOR[status]}>{status}</span> ·{" "}
-                {droneCount} drones
-            </div>
+            <StatusBar status={status} />
         </div>
     );
 }
