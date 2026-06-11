@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { MapView } from "./components/Map/index.tsx";
+import { SettingsPanel } from "./components/Settings/SettingsPanel.tsx";
 import { useWebSocket } from "./hooks/useWebSocket.ts";
 import { useDroneStore } from "./store/droneStore.ts";
 import { useRouteStore } from "./store/routeStore.ts";
@@ -37,6 +38,9 @@ function App() {
     return (
         <div className="relative h-full bg-bg text-text">
             <MapView />
+            <div className="absolute left-3 top-3 z-1100">
+                <SettingsPanel />
+            </div>
             <div className="absolute right-3 top-3 z-1100 rounded border border-border-base bg-surface/90 px-3 py-1.5 text-dim">
                 ws: <span className={STATUS_COLOR[status]}>{status}</span> ·{" "}
                 {droneCount} drones

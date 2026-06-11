@@ -13,13 +13,17 @@ export type ActiveLayer = "map" | "heatmap" | "trajectories";
 interface SettingsState {
     mapEngine: MapEngine;
     activeLayer: ActiveLayer;
+    followSelected: boolean; // Mapbox-only: ease camera to track selection
     setMapEngine: (engine: MapEngine) => void;
     setActiveLayer: (layer: ActiveLayer) => void;
+    setFollowSelected: (follow: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()((set) => ({
     mapEngine: "leaflet",
     activeLayer: "map",
+    followSelected: false,
     setMapEngine: (mapEngine) => set({ mapEngine }),
     setActiveLayer: (activeLayer) => set({ activeLayer }),
+    setFollowSelected: (followSelected) => set({ followSelected }),
 }));

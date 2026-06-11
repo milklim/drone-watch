@@ -16,29 +16,24 @@ import {
     useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import type { Drone, DroneStatus } from "../../../../shared/types.ts";
+import type { Drone } from "../../../../shared/types.ts";
 import type { MapEngineProps } from "./types.ts";
 import { toLatLngArray } from "./mapUtils.ts";
 import { useDroneTrails } from "./useDroneTrails.ts";
-
-const DNIPRO_CENTER: [number, number] = [48.45, 35.0];
-const INITIAL_ZOOM = 12;
+import {
+    DNIPRO_CENTER,
+    DRAFT_COLOR,
+    INITIAL_ZOOM,
+    ROUTE_COLOR,
+    ROUTE_COLOR_SELECTED,
+    STATUS_COLOR,
+} from "./const.ts";
 
 // Dark basemap — CartoDB Dark Matter, free, no token.
 const TILE_URL =
     "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 const TILE_ATTRIBUTION =
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-
-const STATUS_COLOR: Record<DroneStatus, string> = {
-    active: "#22c55e",
-    idle: "#f59e0b",
-    offline: "#4b5563",
-};
-
-const ROUTE_COLOR = "#7888a0";
-const ROUTE_COLOR_SELECTED = "#3b82f6";
-const DRAFT_COLOR = "#3b82f6";
 
 function droneIcon(drone: Drone, selected: boolean): L.DivIcon {
     const size = selected ? 34 : 24;
@@ -85,7 +80,7 @@ export function LeafletMap({
 
     return (
         <MapContainer
-            center={DNIPRO_CENTER}
+            center={toLatLngArray(DNIPRO_CENTER)}
             zoom={INITIAL_ZOOM}
             className="h-full w-full"
             zoomControl={false}

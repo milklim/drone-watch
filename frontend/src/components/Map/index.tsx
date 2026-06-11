@@ -12,14 +12,7 @@ import { useRouteStore } from "../../store/routeStore.ts";
 import { useSettingsStore } from "../../store/settingsStore.ts";
 import type { MapEngineProps } from "./types.ts";
 import { LeafletMap } from "./LeafletMap.tsx";
-
-function MapboxPlaceholder() {
-    return (
-        <div className="flex h-full w-full items-center justify-center bg-bg text-dim">
-            Mapbox engine arrives in Phase 4 — switch back to Leaflet.
-        </div>
-    );
-}
+import { MapboxMap } from "./MapboxMap.tsx";
 
 export function MapView() {
     const drones = useDroneStore((s) => s.drones);
@@ -42,6 +35,6 @@ export function MapView() {
     return mapEngine === "leaflet" ? (
         <LeafletMap {...engineProps} />
     ) : (
-        <MapboxPlaceholder />
+        <MapboxMap {...engineProps} />
     );
 }
