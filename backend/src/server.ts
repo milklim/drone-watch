@@ -35,11 +35,13 @@ app.use("/api/routes", routesRouter);
 const server = createServer(app);
 const hub = attachWebSocketServer(server);
 
-// Simulator loop: advance the fleet, then push to all clients.
+// Simulator loop: advance the fleet, then push to all clients. Route changes
+// (mission created, patrol completed) piggyback on the same cadence.
 initProgress();
 setInterval(() => {
     tick();
     hub.broadcastDrones();
+    hub.broadcastRoutesIfChanged();
 }, TICK_MS);
 
 server.listen(PORT, () => {

@@ -8,9 +8,9 @@
 import type { Drone, Route } from "../../shared/types.ts";
 
 // ─── Routes ─────────────────────────────────────────────────────────────────
-// Each loop is a sequence of ordered waypoints; the simulator wraps from the
-// last back to the first for continuous patrol. Spacing is ~1–1.5 km so motion
-// is clearly visible at realistic drone speeds.
+// Each route is a sequence of ordered waypoints; the simulator flies one lap
+// (closing back to the start point, where the drone parks and goes idle).
+// Spacing is ~1–1.5 km so motion is clearly visible at realistic drone speeds.
 
 export const seedRoutes: Route[] = [
     {

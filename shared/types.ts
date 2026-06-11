@@ -45,7 +45,16 @@ export interface DronesUpdateMessage {
     drones: Drone[];
 }
 
-export type ServerMessage = DronesUpdateMessage;
+/**
+ * Full routes snapshot, sent on connect and whenever the route set changes
+ * (mission created, or a completed patrol's route is removed).
+ */
+export interface RoutesUpdateMessage {
+    type: "routes:update";
+    routes: Route[];
+}
+
+export type ServerMessage = DronesUpdateMessage | RoutesUpdateMessage;
 
 // ─── WebSocket messages: client → server ────────────────────────────────────
 

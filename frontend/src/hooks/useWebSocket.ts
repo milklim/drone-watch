@@ -9,6 +9,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ClientMessage, ServerMessage } from "../../../shared/types.ts";
 import { useDroneStore } from "../store/droneStore.ts";
+import { useRouteStore } from "../store/routeStore.ts";
 
 const MAX_BACKOFF_MS = 10_000;
 
@@ -33,6 +34,7 @@ export function useWebSocket() {
     const socketRef = useRef<WebSocket | null>(null);
 
     const setDrones = useDroneStore((s) => s.setDrones);
+    const setRoutes = useRouteStore((s) => s.setRoutes);
 
     // The whole connection lifecycle lives inside the effect: connect/reconnect
     // state is effect-local, and the only setState calls happen asynchronously
@@ -61,6 +63,8 @@ export function useWebSocket() {
                 }
                 if (msg.type === "drones:update") {
                     setDrones(msg.drones);
+                } else if (msg.type === "routes:update") {
+                    setRoutes(msg.routes);
                 }
             };
 
@@ -102,7 +106,7 @@ export function useWebSocket() {
                 socket.close();
             }
         };
-    }, [setDrones]);
+    }, [setDrones, setRoutes]);
 
     const send = useCallback((message: ClientMessage) => {
         const socket = socketRef.current;

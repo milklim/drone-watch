@@ -27,7 +27,13 @@ const WS_DOT: Record<ConnectionStatus, string> = {
     closed: "bg-danger",
 };
 
-export function Topbar({ status }: { status: ConnectionStatus }) {
+export function Topbar({
+    status,
+    onNewMission,
+}: {
+    status: ConnectionStatus;
+    onNewMission: () => void;
+}) {
     return (
         <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center border-b border-border-base bg-surface px-4">
             <div className="flex select-none items-center gap-2.5 border-r border-border-base pr-5 text-[13px] font-bold tracking-[0.18em] text-white">
@@ -71,13 +77,10 @@ export function Topbar({ status }: { status: ConnectionStatus }) {
                 {WS_LABEL[status]}
             </div>
 
-            {/* New-mission flow is wired in Phase 7; the action lives here now so
-                the header matches the C2 layout. */}
             <button
                 type="button"
-                disabled
-                title="Mission creation arrives in Phase 7"
-                className="ml-auto h-7.5 cursor-not-allowed rounded-[3px] bg-accent px-4 text-[10px] font-bold tracking-[0.12em] text-white opacity-50"
+                onClick={onNewMission}
+                className="ml-auto h-7.5 rounded-[3px] bg-accent px-4 text-[10px] font-bold tracking-[0.12em] text-white transition-colors hover:bg-[#2563eb] active:scale-[0.97]"
             >
                 + NEW MISSION
             </button>

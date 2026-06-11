@@ -30,16 +30,20 @@ export function findIdleDrone(): Drone | undefined {
 
 // ─── Routes ─────────────────────────────────────────────────────────────────
 
+// Bumped on every route mutation; the WS layer compares it between ticks to
+// know when to broadcast a fresh `routes:update` snapshot.
+let routesVersion = 0;
+
+export function getRoutesVersion(): number {
+    return routesVersion;
+}
+
 export function getRoutes(): Route[] {
     return routes;
 }
 
 export function getRoute(id: string): Route | undefined {
     return routes.find((r) => r.id === id);
-}
-
-export function getRouteForDrone(droneId: string): Route | undefined {
-    return routes.find((r) => r.droneId === droneId);
 }
 
 export function addRoute(route: Route): Route {
@@ -49,5 +53,15 @@ export function addRoute(route: Route): Route {
     } else {
         routes.push(route);
     }
+    routesVersion += 1;
     return route;
+}
+
+/** Drop a route (e.g. a completed patrol) so it no longer clutters the map. */
+export function removeRoute(id: string): void {
+    const index = routes.findIndex((r) => r.id === id);
+    if (index >= 0) {
+        routes.splice(index, 1);
+        routesVersion += 1;
+    }
 }

@@ -3,8 +3,10 @@
  *
  * The backend is the *only* mover. Each tick we advance every active drone along
  * its assigned route by linear interpolation between waypoints, recompute its
- * heading (bearing toward the next waypoint), slowly drain its battery, and loop
- * back to the first waypoint on completion. Idle and offline drones never move.
+ * heading (bearing toward the next waypoint), and slowly drain its battery.
+ * A patrol is a single lap: after the last waypoint the drone flies back to the
+ * start point, parks there, and returns to `idle` (ready for a new mission).
+ * Idle and offline drones never move.
  *
  * Per-drone progress (which segment, and 0..1 along it) lives here, not on the
  * Drone object — the contract only exposes derived state (position, heading,
@@ -12,7 +14,7 @@
  */
 
 import type { Drone, LatLng } from "../../shared/types.ts";
-import { getDrones, getRouteForDrone } from "./state.ts";
+import { getDrones, getRoute, removeRoute } from "./state.ts";
 
 export const TICK_MS = 500;
 
@@ -89,8 +91,25 @@ export function initProgress(): void {
 
 // ─── Tick ───────────────────────────────────────────────────────────────────
 
+/**
+ * Park the drone at the route's start point and return it to standby. The
+ * flown route is removed — completed patrols shouldn't clutter the map.
+ */
+function completePatrol(drone: Drone, start: LatLng): void {
+    drone.position = { ...start };
+    drone.status = "idle";
+    drone.speedKmh = 0;
+    drone.routeIndex = 0;
+    if (drone.missionId) removeRoute(drone.missionId);
+    drone.missionId = null;
+    clearProgress(drone.id);
+}
+
 function advanceDrone(drone: Drone): void {
-    const route = getRouteForDrone(drone.id);
+    // Resolve via the drone's own mission, not a route→drone scan: after a
+    // reassignment, multiple routes may name the same drone, but `missionId`
+    // is always the current one.
+    const route = drone.missionId ? getRoute(drone.missionId) : undefined;
     if (!route || route.waypoints.length < 2) return;
 
     const wps = route.waypoints;
@@ -105,15 +124,23 @@ function advanceDrone(drone: Drone): void {
     // Distance to cover this tick, in km.
     let remainingKm = drone.speedKmh * (TICK_MS / 3_600_000);
 
-    // Walk forward across as many segments as the tick distance spans.
+    // Walk forward across as many segments as the tick distance spans. The lap
+    // ends when the closing segment (last waypoint → start) is finished.
     let guard = n * 2; // safety against zero-length-segment loops
     while (remainingKm > 0 && guard-- > 0) {
         const from = wps[prog.segIndex];
         const to = wps[(prog.segIndex + 1) % n];
         const segLen = distanceKm(from, to);
 
+        const finishesSegment =
+            segLen === 0 || remainingKm >= segLen * (1 - prog.t);
+        if (finishesSegment && prog.segIndex === n - 1) {
+            completePatrol(drone, wps[0]);
+            return;
+        }
+
         if (segLen === 0) {
-            prog.segIndex = (prog.segIndex + 1) % n;
+            prog.segIndex += 1;
             prog.t = 0;
             continue;
         }
@@ -124,7 +151,7 @@ function advanceDrone(drone: Drone): void {
             remainingKm = 0;
         } else {
             remainingKm -= remainingOnSeg;
-            prog.segIndex = (prog.segIndex + 1) % n;
+            prog.segIndex += 1;
             prog.t = 0;
         }
     }
