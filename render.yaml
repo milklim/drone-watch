@@ -1,0 +1,23 @@
+# Render — DroneWatch backend (REST + WebSocket simulator).
+#
+# Deploys the Node backend only; the frontend ships to Vercel.
+# `rootDir: backend` runs the build/start commands from backend/, while the
+# full repo is still checked out — so the `../../shared/types.ts` import that
+# both ends share resolves correctly.
+#
+# Render injects PORT (server.ts reads process.env.PORT) and provides the
+# public https/wss host. No build step: we run TypeScript directly with tsx
+
+services:
+    - type: web
+      name: dronewatch-backend
+      runtime: node
+      plan: free
+      rootDir: backend
+      buildCommand: npm install
+      startCommand: npm start
+      healthCheckPath: /api/health
+      autoDeploy: true
+      envVars:
+          - key: NODE_ENV
+            value: production
