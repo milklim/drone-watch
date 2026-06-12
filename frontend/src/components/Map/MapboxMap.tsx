@@ -175,6 +175,12 @@ function DroneMarker({
             longitude={drone.position.lng}
             latitude={drone.position.lat}
             anchor="center"
+            // Rotate in map space so the icon tracks the drone's geographic
+            // heading even when follow mode rotates the camera bearing. Keep the
+            // billboard (viewport pitch) look so it stays upright under tilt.
+            rotation={drone.heading}
+            rotationAlignment="map"
+            pitchAlignment="viewport"
             onClick={(e) => {
                 // Keep the click from also registering as a map click.
                 e.originalEvent.stopPropagation();
@@ -186,7 +192,6 @@ function DroneMarker({
                     width: size,
                     height: size,
                     cursor: "pointer",
-                    transform: `rotate(${drone.heading}deg)`,
                     filter: `drop-shadow(0 0 ${glow}px ${color})`,
                 }}
             >
