@@ -137,8 +137,8 @@ function MissionPanel({
     }
 
     return (
-        <div className="pointer-events-none absolute inset-0 z-1200 flex items-center justify-end pr-4">
-            <div className="pointer-events-auto w-100 max-w-[85%] rounded-[5px] border border-border-hi bg-surface p-5 shadow-[0_30px_80px_rgba(0,0,0,0.9)]">
+        <div className="pointer-events-none absolute inset-0 z-1200 flex items-end justify-center md:items-center md:justify-end md:pr-4">
+            <div className="pointer-events-auto max-h-[55vh] w-full overflow-y-auto rounded-t-[10px] border border-border-hi bg-surface p-4 shadow-[0_30px_80px_rgba(0,0,0,0.9)] md:max-h-[calc(100vh-6rem)] md:w-100 md:max-w-[85%] md:rounded-[5px] md:p-5">
                 <div className="mb-4 flex items-center justify-between">
                     <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-white">
                         New Mission

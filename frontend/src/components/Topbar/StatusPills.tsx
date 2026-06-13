@@ -39,7 +39,7 @@ export function StatusPills() {
     );
 
     return (
-        <div className="flex h-full shrink-0 items-center gap-4.5 border-r border-border-base px-5">
+        <div className="flex h-full shrink-0 items-center gap-3 border-r border-border-base px-3 md:gap-4.5 md:px-5">
             {PILLS.map(({ status, label, text, dot }) => (
                 <span
                     key={status}
@@ -50,7 +50,8 @@ export function StatusPills() {
                             status === "active" ? "animate-pulse" : ""
                         }`}
                     />
-                    {counts[status]} {label}
+                    {counts[status]}
+                    <span className="hidden md:inline">&nbsp;{label}</span>
                 </span>
             ))}
         </div>

@@ -34,7 +34,7 @@ export function Topbar({
     onNewMission: () => void;
 }) {
     return (
-        <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center overflow-hidden border-b border-border-base bg-surface px-4">
+        <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center overflow-hidden border-b border-border-base bg-surface px-3 md:px-4">
             <div className="flex shrink-0 select-none items-center gap-2.5 border-r border-border-base pr-5 text-[13px] font-bold tracking-[0.18em] text-white">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                     <polygon
@@ -78,9 +78,9 @@ export function Topbar({
             <button
                 type="button"
                 onClick={onNewMission}
-                className="ml-auto shrink-0 whitespace-nowrap h-7.5 rounded-[3px] bg-accent px-4 text-[10px] font-bold tracking-[0.12em] text-white transition-colors hover:bg-[#2563eb] active:scale-[0.97]"
+                className="ml-auto shrink-0 whitespace-nowrap h-7.5 rounded-[3px] bg-accent px-3 text-[11px] font-bold tracking-[0.12em] text-white transition-colors hover:bg-[#2563eb] active:scale-[0.97] md:px-4 md:text-[10px]"
             >
-                + NEW MISSION
+                +<span className="hidden md:inline"> NEW MISSION</span>
             </button>
         </header>
     );

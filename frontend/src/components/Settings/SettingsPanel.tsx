@@ -16,7 +16,7 @@ export function SettingsPanel() {
     const setFollowSelected = useSettingsStore((s) => s.setFollowSelected);
 
     return (
-        <div className="flex flex-col gap-2 rounded border border-border-base bg-surface/90 px-3 py-2.5 backdrop-blur">
+        <div className="flex w-48 max-w-[calc(100vw-1.5rem)] flex-col gap-2 rounded border border-border-base bg-surface/90 px-3 py-2.5 text-[11px] backdrop-blur md:w-auto">
             <label className="flex flex-col gap-1">
                 <span className="text-[10px] uppercase tracking-wider text-dim">
                     Map engine
