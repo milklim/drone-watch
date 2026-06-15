@@ -62,7 +62,7 @@ export function StatusBar({ status }: { status: ConnectionStatus }) {
     const activeMissions = drones.filter((d) => d.status === "active").length;
 
     return (
-        <footer className="flex h-[var(--spacing-botbar)] shrink-0 items-center overflow-hidden border-t border-border-base bg-surface px-3.5 text-[10px] text-dim">
+        <footer className="flex h-botbar shrink-0 items-center overflow-hidden border-t border-border-base bg-surface px-3.5 text-[10px] text-dim">
             <Segment
                 label="Elapsed"
                 value={formatElapsed(elapsed)}

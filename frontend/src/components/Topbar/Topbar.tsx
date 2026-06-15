@@ -6,6 +6,7 @@
  */
 
 import type { ConnectionStatus } from "../../hooks/useWebSocket.ts";
+import { DroneIcon } from "../icons/DroneIcon.tsx";
 import { StatusPills } from "./StatusPills.tsx";
 
 const WS_LABEL: Record<ConnectionStatus, string> = {
@@ -36,37 +37,14 @@ export function Topbar({
     return (
         <header className="z-10 flex h-(--spacing-topbar) shrink-0 items-center overflow-hidden border-b border-border-base bg-surface px-3 md:px-4">
             <div className="flex shrink-0 select-none items-center gap-2.5 border-r border-border-base pr-5 text-[13px] font-bold tracking-[0.18em] text-white">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <polygon
-                        points="12,2 4,9 7,9 7,15 9,15 9,11 15,11 15,15 17,15 17,9 20,9"
-                        fill="#3b82f6"
-                        opacity="0.9"
-                    />
-                    <rect
-                        x="10"
-                        y="15"
-                        width="4"
-                        height="6"
-                        fill="#3b82f6"
-                        opacity="0.7"
-                    />
-                    <line
-                        x1="7"
-                        y1="18"
-                        x2="17"
-                        y2="18"
-                        stroke="#3b82f6"
-                        strokeWidth="1.5"
-                        opacity="0.5"
-                    />
-                    <circle cx="12" cy="6" r="1.5" fill="#93c5fd" />
-                </svg>
+                <DroneIcon />
                 <span className="hidden lg:inline">DRONEWATCH</span>
             </div>
 
             <StatusPills />
 
             <div
+                data-testid="ws-status"
                 className={`hidden items-center gap-2 border-r border-border-base px-4.5 text-[10px] font-medium tracking-widest lg:flex ${WS_COLOR[status]}`}
             >
                 <span

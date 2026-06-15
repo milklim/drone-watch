@@ -138,7 +138,7 @@ function MissionPanel({
 
     return (
         <div className="pointer-events-none absolute inset-0 z-1200 flex items-end justify-center md:items-center md:justify-end md:pr-4">
-            <div className="pointer-events-auto max-h-[55vh] w-full overflow-y-auto rounded-t-[10px] border border-border-hi bg-surface p-4 shadow-[0_30px_80px_rgba(0,0,0,0.9)] md:max-h-[calc(100vh-6rem)] md:w-100 md:max-w-[85%] md:rounded-[5px] md:p-5">
+            <div data-testid="mission-panel" className="pointer-events-auto max-h-[55vh] w-full overflow-y-auto rounded-t-[10px] border border-border-hi bg-surface p-4 shadow-[0_30px_80px_rgba(0,0,0,0.9)] md:max-h-[calc(100vh-6rem)] md:w-100 md:max-w-[85%] md:rounded-[5px] md:p-5">
                 <div className="mb-4 flex items-center justify-between">
                     <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-white">
                         New Mission
@@ -159,6 +159,7 @@ function MissionPanel({
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         spellCheck={false}
+                        data-testid="mission-name-input"
                         className="h-botbar w-full rounded-[3px] border border-border-hi bg-bg px-3 text-text outline-none transition-colors focus:border-accent"
                     />
                 </div>
