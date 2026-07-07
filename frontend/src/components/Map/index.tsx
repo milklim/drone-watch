@@ -7,13 +7,17 @@
  * touches drone/route state.
  */
 
+import { lazy, Suspense } from "react";
 import { useDroneStore } from "../../store/droneStore.ts";
 import { useRouteStore } from "../../store/routeStore.ts";
 import { useSettingsStore } from "../../store/settingsStore.ts";
 import { useUiStore } from "../../store/uiStore.ts";
 import type { MapEngineProps } from "./types.ts";
 import { LeafletMap } from "./LeafletMap.tsx";
-import { MapboxMap } from "./MapboxMap.tsx";
+
+const MapboxMap = lazy(() =>
+    import("./MapboxMap.tsx").then((m) => ({ default: m.MapboxMap }))
+);
 
 export function MapView() {
     const drones = useDroneStore((s) => s.drones);
@@ -38,6 +42,8 @@ export function MapView() {
     return mapEngine === "leaflet" ? (
         <LeafletMap {...engineProps} />
     ) : (
-        <MapboxMap {...engineProps} />
+        <Suspense fallback={<div className="h-full w-full bg-bg" />}>
+            <MapboxMap {...engineProps} />
+        </Suspense>
     );
 }
