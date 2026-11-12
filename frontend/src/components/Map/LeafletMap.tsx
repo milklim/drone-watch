@@ -30,11 +30,10 @@ import {
     STATUS_COLOR,
 } from "./const.ts";
 
-// Dark basemap — CartoDB Dark Matter, free, no token.
-const TILE_URL =
-    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+// CARTO's CDN now demands an API key; OSM tiles need none and are darkened via CSS (.dark-tiles).
+const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_ATTRIBUTION =
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 function droneIcon(drone: Drone, selected: boolean): L.DivIcon {
     const size = selected ? 34 : 24;
@@ -125,7 +124,11 @@ export function LeafletMap({
             className="h-full w-full"
             zoomControl={false}
         >
-            <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
+            <TileLayer
+                url={TILE_URL}
+                attribution={TILE_ATTRIBUTION}
+                className="dark-tiles"
+            />
             <MapEvents onMapClick={onMapClick} onCursorMove={onCursorMove} />
             <RecenterOnSelect
                 selectedDroneId={selectedDroneId}
